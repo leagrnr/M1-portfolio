@@ -9,10 +9,9 @@ const GET_PROJECTS = `
       title
       excerpt
     }
-  }
-`;
+  }`;
 
-export async function getProjects() {
+export async function getProjects(): Promise<ProjectsResponse> {
   const vars = { ownerId: process.env.NEXT_PUBLIC_OWNER_TAG! };
   return strapiClient.request<ProjectsResponse>(GET_PROJECTS, vars);
 }

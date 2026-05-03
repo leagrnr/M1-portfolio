@@ -7,9 +7,8 @@ const CREATE_CONTACT = `
     createContact(data: $data) {
       documentId
     }
-  }
-`;
+  }`;
 
-export async function createContact(data: Contact) {
+export async function createContact(data: Contact): Promise<{ createContact: { documentId: string } }> {
   return strapiClient.request(CREATE_CONTACT, { data });
 }
