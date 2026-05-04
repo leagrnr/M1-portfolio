@@ -2,9 +2,9 @@ import { getPageBySlug } from '@/services/pageService';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 
 export default async function Home() {
-  const page = await getPageBySlug('homepage-chris');
+  const page = await getPageBySlug('pipou');
   if (!page) {
-    throw new Error('La page "homepage-chris" est introuvable.');
+    throw new Error('La page "pipou" est introuvable.');
   }
   return (
     <main className="p-8 max-w-4xl mx-auto">

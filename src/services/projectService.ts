@@ -1,6 +1,6 @@
 import 'server-only';
 import { strapiClient } from '@/lib/graphql-client';
-import { ProjectsResponse } from '@/types/strapi';
+import { ProjectsResponseSchema, type Project } from '@/schemas/project';
 
 const GET_PROJECTS = `
   query GetProjects($ownerId: String!, $locale: I18NLocaleCode) {
@@ -23,12 +23,14 @@ const GET_PROJECTS = `
     }
   }`;
 
-export async function getProjects(locale: string = 'en'): Promise<ProjectsResponse> {
-  const vars = { 
+export async function getProjects(locale: string = 'en'): Promise<Project[]> {
+  const vars = {
     ownerId: process.env.NEXT_PUBLIC_OWNER_TAG!,
-    locale 
+    locale
   };
-  return strapiClient.request<ProjectsResponse>(GET_PROJECTS, vars, {
+  const raw = await strapiClient.request(GET_PROJECTS, vars, {
     next: { tags: ['projects'] }
   } as any);
+  const { projects } = ProjectsResponseSchema.parse(raw);
+  return projects;
 }
