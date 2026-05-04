@@ -1,6 +1,6 @@
 import 'server-only';
 import { strapiClient } from '@/lib/graphql-client';
-import { Contact, CreateContactInput } from '@/types/strapi';
+import { type CreateContactInput } from '@/schemas/contact';
 
 const CREATE_CONTACT = `
   mutation CreateContact($data: ContactInput!) {

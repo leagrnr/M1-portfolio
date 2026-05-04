@@ -1,6 +1,6 @@
 import 'server-only';
 import { strapiClient } from '@/lib/graphql-client';
-import { Page, PageResponse } from '@/types/strapi';
+import { PageResponseSchema, type Page } from '@/schemas/page';
 
 const GET_PAGES = `
   query GetPages($filters: PageFiltersInput, $locale: I18NLocaleCode) {
@@ -23,9 +23,10 @@ export async function getPages(locale: string = 'en'): Promise<Page[]> {
       owner_tag: { eq: process.env.NEXT_PUBLIC_OWNER_TAG }
     }
   };
-  const { pages } = await strapiClient.request<PageResponse>(GET_PAGES, variables, {
+  const raw = await strapiClient.request(GET_PAGES, variables, {
     next: { tags: ['pages'] }
   } as any);
+  const { pages } = PageResponseSchema.parse(raw);
   return pages;
 }
 
@@ -37,8 +38,9 @@ export async function getPageBySlug(slug: string, locale: string = 'en'): Promis
       owner_tag: { eq: process.env.NEXT_PUBLIC_OWNER_TAG }
     }
   };
-  const { pages } = await strapiClient.request<PageResponse>(GET_PAGES, variables, {
+  const raw = await strapiClient.request(GET_PAGES, variables, {
     next: { tags: ['pages'] }
   } as any);
+  const { pages } = PageResponseSchema.parse(raw);
   return pages[0];
 }
