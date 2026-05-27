@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ContactFormSchema, type ContactFormData } from '@/schemas/contact';
 import { submitContact } from '@/actions/contactActions';
+import { useUIStore } from '@/stores/useUIStore';
 
 function TermField({
   label,
@@ -35,7 +36,8 @@ function TermField({
 }
 
 export function ContactForm() {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [loading, setLoading] = useState(false);
+  const addNotification = useUIStore((s) => s.addNotification);
 
   const {
     register,
@@ -48,64 +50,20 @@ export function ContactForm() {
   });
 
   const onSubmit = async (data: ContactFormData) => {
-    setStatus('loading');
+    setLoading(true);
     const formData = new FormData();
     formData.set('name', data.name);
     formData.set('email', data.email);
     formData.set('message', data.message);
     const result = await submitContact(null, formData);
+    setLoading(false);
     if (result.success) {
-      setStatus('success');
+      addNotification('success', 'Message envoyé !');
       reset();
     } else {
-      setStatus('error');
+      addNotification('error', 'Échec de l\'envoi — réessayez');
     }
   };
-
-  if (status === 'success') {
-    return (
-      <div
-        style={{
-          background: 'var(--bg-secondary)',
-          border: '1px solid var(--syn-property)',
-          borderRadius: 6,
-          padding: '20px 24px',
-          color: 'var(--syn-property)',
-          fontSize: 13,
-        }}
-      >
-        <div style={{ color: 'var(--syn-comment)', marginBottom: 8 }}>{'// ✓ message envoyé'}</div>
-        <div>
-          <span style={{ color: 'var(--syn-keyword)' }}>return</span>
-          {' { '}
-          <span style={{ color: 'var(--syn-property)' }}>status</span>
-          {': '}
-          <span style={{ color: 'var(--syn-number)' }}>200</span>
-          {', '}
-          <span style={{ color: 'var(--syn-property)' }}>message</span>
-          {': '}
-          <span style={{ color: 'var(--syn-string)' }}>{'\'OK\''}</span>
-          {' }'}
-        </div>
-        <button
-          onClick={() => setStatus('idle')}
-          style={{
-            marginTop: 16,
-            background: 'transparent',
-            border: '1px solid var(--border)',
-            color: 'var(--text-muted)',
-            padding: '6px 14px',
-            borderRadius: 4,
-            cursor: 'pointer',
-            fontSize: 12,
-            fontFamily: 'inherit',
-          }}
-        >
-          $ new message
-        </button>
-      </div>
-    );
-  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -136,22 +94,16 @@ export function ContactForm() {
         />
       </TermField>
 
-      {status === 'error' && (
-        <div style={{ color: 'var(--syn-keyword)', fontSize: 12, marginBottom: 16 }}>
-          {'// error: échec de l\'envoi — réessayez'}
-        </div>
-      )}
-
       <button
         type="submit"
-        disabled={status === 'loading'}
+        disabled={loading}
         style={{
-          background: status === 'loading' ? 'var(--bg-tertiary)' : 'var(--bg-secondary)',
+          background: loading ? 'var(--bg-tertiary)' : 'var(--bg-secondary)',
           border: '1px solid var(--syn-variable)',
-          color: status === 'loading' ? 'var(--text-muted)' : 'var(--syn-variable)',
+          color: loading ? 'var(--text-muted)' : 'var(--syn-variable)',
           padding: '10px 24px',
           borderRadius: 4,
-          cursor: status === 'loading' ? 'wait' : 'pointer',
+          cursor: loading ? 'wait' : 'pointer',
           fontFamily: 'inherit',
           fontSize: 13,
           transition: 'background 0.15s, color 0.15s',
@@ -161,8 +113,8 @@ export function ContactForm() {
         }}
       >
         <span style={{ color: 'var(--syn-variable)' }}>$</span>
-        {status === 'loading' ? 'sending...' : 'send message'}
-        {status === 'loading' && <span className="cursor" />}
+        {loading ? 'sending...' : 'send message'}
+        {loading && <span className="cursor" />}
       </button>
     </form>
   );

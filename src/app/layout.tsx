@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { BackToTop } from '@/components/BackToTop';
 import { Navbar } from '@/components/Navbar';
+import { Notifications } from '@/components/Notifications';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import './globals.css';
 
@@ -30,6 +32,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <Navbar />
           <main style={{ flex: 1 }}>{children}</main>
+          <Notifications />
+          <BackToTop />
           <footer
             style={{
               borderTop: '1px solid var(--border)',

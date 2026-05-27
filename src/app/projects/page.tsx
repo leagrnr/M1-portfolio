@@ -1,5 +1,6 @@
 import { getProjects } from '@/services/projectService';
-import { ProjectCard } from '@/components/ProjectCard';
+import { ProjectsFilter } from '@/components/ProjectsFilter';
+import { ProjectsList } from '@/components/ProjectsList';
 
 export const metadata = { title: 'Projects — Portfolio' };
 
@@ -26,29 +27,14 @@ export default async function ProjectsPage() {
         {'[] = ['}
       </div>
 
+      <ProjectsFilter projects={projects} />
+
       {projects.length === 0 ? (
-        <div
-          style={{
-            paddingLeft: 24,
-            color: 'var(--syn-comment)',
-            fontStyle: 'italic',
-          }}
-        >
+        <div style={{ paddingLeft: 24, color: 'var(--syn-comment)', fontStyle: 'italic' }}>
           {'// Aucun projet pour le moment'}
         </div>
       ) : (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))',
-            gap: 16,
-            paddingLeft: 0,
-          }}
-        >
-          {projects.map((p, i) => (
-            <ProjectCard key={p.documentId} project={p} index={i} />
-          ))}
-        </div>
+        <ProjectsList projects={projects} />
       )}
 
       <div style={{ marginTop: 32, color: 'var(--syn-punct)' }}>
