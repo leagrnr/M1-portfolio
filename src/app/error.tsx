@@ -10,19 +10,54 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log the error to an error reporting service
     console.error(error);
   }, [error]);
 
   return (
-    <div className="p-8 text-center flex flex-col items-center justify-center min-h-[50vh]">
-      <h2 className="text-2xl font-bold text-red-600 mb-4">Une erreur est survenue !</h2>
-      <p className="text-slate-600 mb-6">{error.message || 'Impossible de charger la page.'}</p>
-      <button
-        onClick={() => reset()}
-        className="px-6 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors"
+    <div style={{ maxWidth: 600, margin: '80px auto', padding: '0 24px' }}>
+      <div style={{ color: 'var(--syn-comment)', marginBottom: 24, lineHeight: 1.8 }}>
+        <div>{'/**'}</div>
+        <div>{' * @error   500'}</div>
+        <div>{` * @message ${error.message || 'Une erreur est survenue'}`}</div>
+        {error.digest && <div>{` * @digest  ${error.digest}`}</div>}
+        <div>{' */'}</div>
+      </div>
+
+      <div
+        style={{
+          background: 'var(--bg-secondary)',
+          border: '1px solid var(--syn-keyword)',
+          borderRadius: 6,
+          padding: '16px 20px',
+          marginBottom: 32,
+          fontSize: 13,
+        }}
       >
-        Réessayer
+        <span style={{ color: 'var(--syn-keyword)' }}>RuntimeError</span>
+        {': '}
+        <span style={{ color: 'var(--text-secondary)' }}>
+          {error.message || "Une erreur inattendue s'est produite."}
+        </span>
+      </div>
+
+      <button
+        onClick={reset}
+        style={{
+          background: 'var(--bg-secondary)',
+          border: '1px solid var(--syn-variable)',
+          color: 'var(--syn-variable)',
+          padding: '10px 20px',
+          borderRadius: 4,
+          cursor: 'pointer',
+          fontFamily: 'inherit',
+          fontSize: 13,
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
+        <span style={{ color: 'var(--syn-variable)' }}>$</span>
+        {' retry()'}
       </button>
     </div>
   );

@@ -40,6 +40,7 @@ export interface Project {
   images?: StrapiImage[];
   technologies?: string;
   url?: string | null;
+  github_url?: string | null;
   year?: number;
   owner_tag: string;
   locale: string;

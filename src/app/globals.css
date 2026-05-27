@@ -1,26 +1,235 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* GitHub Dark (default) */
+:root, .dark {
+  --bg-primary:    #0d1117;
+  --bg-secondary:  #161b22;
+  --bg-tertiary:   #21262d;
+  --bg-hover:      #2d333b;
+
+  --border:        #30363d;
+  --border-muted:  #21262d;
+
+  --text-primary:  #e6edf3;
+  --text-secondary:#c9d1d9;
+  --text-muted:    #8b949e;
+
+  --syn-keyword:   #ff7b72;
+  --syn-string:    #a5d6ff;
+  --syn-number:    #ffa657;
+  --syn-function:  #d2a8ff;
+  --syn-variable:  #79c0ff;
+  --syn-property:  #7ee787;
+  --syn-comment:   #8b949e;
+  --syn-punct:     #e6edf3;
+
+  --dot-red:    #ff5f57;
+  --dot-yellow: #febc2e;
+  --dot-green:  #28c840;
+}
+
+/* GitHub Light */
+.light {
+  --bg-primary:    #ffffff;
+  --bg-secondary:  #f6f8fa;
+  --bg-tertiary:   #eaeef2;
+  --bg-hover:      #d0d7de;
+
+  --border:        #d0d7de;
+  --border-muted:  #eaeef2;
+
+  --text-primary:  #24292f;
+  --text-secondary:#57606a;
+  --text-muted:    #6e7781;
+
+  --syn-keyword:   #cf222e;
+  --syn-string:    #0a3069;
+  --syn-number:    #953800;
+  --syn-function:  #8250df;
+  --syn-variable:  #0550ae;
+  --syn-property:  #116329;
+  --syn-comment:   #6e7781;
+  --syn-punct:     #24292f;
+
+  --dot-red:    #ff5f57;
+  --dot-yellow: #febc2e;
+  --dot-green:  #28c840;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background:   var(--bg-primary);
+  --color-foreground:   var(--text-primary);
+  --font-sans:          var(--font-geist-sans);
+  --font-mono:          var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-geist-mono), 'Cascadia Code', 'Fira Code', ui-monospace, monospace;
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--bg-hover); }
+
+/* Selection */
+::selection { background: rgba(79, 140, 201, 0.35); }
+
+/* Cursor blink */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.cursor::after {
+  content: '▮';
+  color: var(--syn-property);
+  animation: blink 1.1s step-end infinite;
+  margin-left: 1px;
+  font-size: 0.9em;
+}
+
+/* Line number gutter */
+.line-numbers {
+  counter-reset: line;
+}
+.line-numbers .ln::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 2.5rem;
+  text-align: right;
+  margin-right: 1.5rem;
+  color: var(--text-muted);
+  user-select: none;
+  font-size: 0.8rem;
+}
+
+/* Prose overrides for BlocksRenderer */
+.code-prose h1, .code-prose h2, .code-prose h3 {
+  color: var(--syn-function);
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+.code-prose h1 { font-size: 1.4rem; }
+.code-prose h2 { font-size: 1.2rem; }
+.code-prose h3 { font-size: 1rem; }
+
+.code-prose p {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+.code-prose p::before {
+  content: '// ';
+  color: var(--syn-comment);
+}
+
+.code-prose a {
+  color: var(--syn-variable);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.code-prose a:hover { color: var(--syn-string); }
+
+.code-prose ul { list-style: none; padding: 0; margin-bottom: 1rem; }
+.code-prose ul li::before { content: '- '; color: var(--syn-comment); }
+.code-prose ol { list-style: none; padding: 0; counter-reset: ol; margin-bottom: 1rem; }
+.code-prose ol li::before {
+  counter-increment: ol;
+  content: counter(ol) '. ';
+  color: var(--syn-number);
+}
+.code-prose li { margin-bottom: 0.25rem; color: var(--text-secondary); }
+
+.code-prose code {
+  background: var(--bg-tertiary);
+  color: var(--syn-string);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+.code-prose pre {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+.code-prose blockquote {
+  border-left: 3px solid var(--syn-keyword);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Card hover */
+.code-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.code-card:hover {
+  border-color: var(--syn-variable);
+  transform: translateY(-2px);
+}
+
+/* Input terminal style */
+.term-input {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13px;
+  padding: 8px 12px;
+  width: 100%;
+  outline: none;
+  border-radius: 4px;
+  transition: border-color 0.15s;
+}
+.term-input:focus { border-color: var(--syn-variable); }
+.term-input::placeholder { color: var(--text-muted); }
+.term-input.invalid { border-color: var(--syn-keyword); }
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeInUp 0.4s ease both; }
+.fade-in-1 { animation-delay: 0.05s; }
+.fade-in-2 { animation-delay: 0.12s; }
+.fade-in-3 { animation-delay: 0.20s; }
+.fade-in-4 { animation-delay: 0.28s; }
+.fade-in-5 { animation-delay: 0.38s; }
+
+/* CTA link hover */
+.cta-link:hover { border-color: var(--syn-property) !important; }
+.cta-link-contact:hover { border-color: var(--syn-string) !important; }
+
+/* Skeleton pulse */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+.skeleton {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  animation: pulse 1.6s ease-in-out infinite;
 }
