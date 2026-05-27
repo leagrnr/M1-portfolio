@@ -117,6 +117,26 @@ export default async function Home() {
           {' ls ~/projects'}
         </Link>
         <Link
+          href="/my"
+          className="cta-link-about"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 8,
+            background: 'var(--bg-secondary)',
+            border: '1px solid var(--border)',
+            color: 'var(--syn-function)',
+            padding: '10px 20px',
+            borderRadius: 4,
+            textDecoration: 'none',
+            fontSize: 13,
+            transition: 'border-color 0.15s, color 0.15s',
+          }}
+        >
+          <span style={{ color: 'var(--syn-variable)' }}>$</span>
+          {' cat ~/about'}
+        </Link>
+        <Link
           href="/contact"
           className="cta-link-contact"
           style={{

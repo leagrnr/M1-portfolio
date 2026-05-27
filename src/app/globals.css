@@ -245,6 +245,7 @@ body {
 
 /* CTA link hover */
 .cta-link:hover { border-color: var(--syn-property) !important; }
+.cta-link-about:hover { border-color: var(--syn-function) !important; }
 .cta-link-contact:hover { border-color: var(--syn-string) !important; }
 
 /* Skeleton pulse */
