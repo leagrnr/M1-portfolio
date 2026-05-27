@@ -219,6 +219,16 @@ body {
 .fade-in-4 { animation-delay: 0.28s; }
 .fade-in-5 { animation-delay: 0.38s; }
 
+/* Focus visible */
+:focus-visible {
+  outline: 2px solid var(--syn-variable);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
 /* Page transition */
 @keyframes pageFade {
   from { opacity: 0; transform: translateY(6px); }

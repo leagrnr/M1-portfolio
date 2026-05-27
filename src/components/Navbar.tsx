@@ -6,6 +6,7 @@ import { ThemeToggle } from './ThemeToggle';
 
 const tabs = [
   { href: '/',         label: 'home.tsx',     path: '~/' },
+  { href: '/my',       label: 'about.tsx',    path: '~/about' },
   { href: '/projects', label: 'projects.tsx', path: '~/projects' },
   { href: '/contact',  label: 'contact.tsx',  path: '~/contact' },
 ];

@@ -3,18 +3,18 @@
 import { useUIStore } from '@/stores/useUIStore';
 
 const config = {
-  success: { color: 'var(--syn-property)',  prefix: '// ✓' },
-  error:   { color: 'var(--syn-keyword)',   prefix: '// ✗' },
-  info:    { color: 'var(--syn-variable)',  prefix: '//' },
+  success: { color: 'var(--syn-property)', prefix: '// ✓' },
+  error:   { color: 'var(--syn-keyword)',  prefix: '// ✗' },
+  info:    { color: 'var(--syn-variable)', prefix: '//' },
 } as const;
 
 export function Notifications() {
   const { notifications, removeNotification } = useUIStore();
 
-  if (notifications.length === 0) return null;
-
   return (
     <div
+      role="region"
+      aria-label="Notifications"
       style={{
         position: 'fixed',
         bottom: 24,
@@ -31,6 +31,8 @@ export function Notifications() {
         return (
           <div
             key={n.id}
+            role={n.type === 'error' ? 'alert' : 'status'}
+            aria-live={n.type === 'error' ? 'assertive' : 'polite'}
             className="notif-toast"
             style={{
               background: 'var(--bg-secondary)',
@@ -49,6 +51,7 @@ export function Notifications() {
             <span style={{ color: 'var(--text-secondary)', flex: 1 }}>{n.message}</span>
             <button
               onClick={() => removeNotification(n.id)}
+              aria-label="Fermer la notification"
               style={{
                 background: 'transparent',
                 border: 'none',

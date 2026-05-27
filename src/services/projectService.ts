@@ -3,6 +3,8 @@ import { z } from 'zod';
 import { strapiClient } from '@/lib/graphql-client';
 import { ProjectSchema, ProjectsResponseSchema, type Project } from '@/schemas/project';
 
+type NextCache = { next?: { tags?: string[] } };
+
 const PROJECT_FIELDS = `
   documentId
   title
@@ -38,17 +40,13 @@ const GET_PROJECT = `
 
 export async function getProjects(locale: string = 'en'): Promise<Project[]> {
   const vars = { ownerId: process.env.NEXT_PUBLIC_OWNER_TAG!, locale };
-  const raw = await strapiClient.request(GET_PROJECTS, vars, {
-    next: { tags: ['projects'] }
-  } as any);
+  const raw = await strapiClient.request(GET_PROJECTS, vars, { next: { tags: ['projects'] } } as NextCache);
   const { projects } = ProjectsResponseSchema.parse(raw);
   return projects;
 }
 
 export async function getProjectById(documentId: string, locale: string = 'en'): Promise<Project | null> {
-  const raw = await strapiClient.request(GET_PROJECT, { documentId, locale }, {
-    next: { tags: ['projects'] }
-  } as any);
+  const raw = await strapiClient.request(GET_PROJECT, { documentId, locale }, { next: { tags: ['projects'] } } as NextCache);
   const { project } = z.object({ project: ProjectSchema.nullable() }).parse(raw);
   return project;
 }

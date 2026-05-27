@@ -1,22 +1,15 @@
 'use client';
 
-import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useThemeStore } from '@/stores/useThemeStore';
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
-  if (!mounted) return <div style={{ width: 80 }} />;
-
+  const { theme, toggleTheme } = useThemeStore();
   const isDark = theme === 'dark';
 
   return (
     <button
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      title={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
+      onClick={toggleTheme}
+      aria-label={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
       style={{
         background: 'transparent',
         border: '1px solid var(--border)',

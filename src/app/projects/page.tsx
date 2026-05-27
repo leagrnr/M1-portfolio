@@ -3,13 +3,13 @@ import { ProjectsFilter } from '@/components/ProjectsFilter';
 import { ProjectsList } from '@/components/ProjectsList';
 
 export const metadata = { title: 'Projects — Portfolio' };
+export const revalidate = 3600;
 
 export default async function ProjectsPage() {
   const projects = await getProjects();
 
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto', padding: '48px 24px' }}>
-      {/* File header */}
+    <>
       <div style={{ color: 'var(--syn-comment)', marginBottom: 32, lineHeight: 1.8 }}>
         <div>{'/**'}</div>
         <div>{' * @file projects.tsx'}</div>
@@ -17,8 +17,7 @@ export default async function ProjectsPage() {
         <div>{' */'}</div>
       </div>
 
-      {/* Declaration */}
-      <div style={{ marginBottom: 32 }}>
+      <div style={{ marginBottom: 16 }}>
         <span style={{ color: 'var(--syn-keyword)' }}>const</span>
         {' '}
         <span style={{ color: 'var(--syn-variable)' }}>projects</span>
@@ -37,9 +36,7 @@ export default async function ProjectsPage() {
         <ProjectsList projects={projects} />
       )}
 
-      <div style={{ marginTop: 32, color: 'var(--syn-punct)' }}>
-        {']'}
-      </div>
-    </div>
+      <div style={{ marginTop: 32, color: 'var(--syn-punct)' }}>{']'}</div>
+    </>
   );
 }

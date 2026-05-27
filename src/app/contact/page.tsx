@@ -1,6 +1,7 @@
 import { ContactForm } from '@/components/ContactForm';
 
 export const metadata = { title: 'Contact — Portfolio' };
+export const dynamic = 'force-static'; // SSG — aucune donnée dynamique, page statique
 
 export default function ContactPage() {
   return (

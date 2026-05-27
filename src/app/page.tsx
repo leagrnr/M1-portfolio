@@ -2,6 +2,8 @@ import { getPageBySlug } from '@/services/pageService';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 import Link from 'next/link';
 
+export const revalidate = 3600; // ISR — revalidation toutes les heures
+
 export default async function Home() {
   const page = await getPageBySlug('home');
 
@@ -64,16 +66,6 @@ export default async function Home() {
           {','}
         </div>
         <div style={{ paddingLeft: 24 }}>
-          <span style={{ color: 'var(--syn-property)' }}>stack</span>
-          {': ['}
-          <span style={{ color: 'var(--syn-string)' }}>'Next.js'</span>
-          {', '}
-          <span style={{ color: 'var(--syn-string)' }}>'TypeScript'</span>
-          {', '}
-          <span style={{ color: 'var(--syn-string)' }}>'Strapi'</span>
-          {'],'}
-        </div>
-        <div style={{ paddingLeft: 24 }}>
           <span style={{ color: 'var(--syn-property)' }}>available</span>
           {': '}
           <span style={{ color: 'var(--syn-keyword)' }}>true</span>
@@ -86,7 +78,7 @@ export default async function Home() {
       {page && (
         <div className="fade-in fade-in-4" style={{ marginBottom: 48 }}>
           <div style={{ color: 'var(--syn-comment)', marginBottom: 12 }}>
-            {'// ── description ──────────────────────────────────'}
+            {'// ── Description ──────────────────────────────────'}
           </div>
           <div
             className="code-prose"
