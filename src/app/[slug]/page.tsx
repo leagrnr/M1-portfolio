@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
-import { BlocksRenderer } from '@strapi/blocks-react-renderer';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { getPageBySlug } from '@/services/pageService';
 
 type Params = Promise<{ slug: string }>;
@@ -37,12 +38,7 @@ export default async function DynamicPage(props: { params: Params }) {
 
         <div style={{ paddingLeft: 20 }}>
           {/* h1 */}
-          <div
-            className="fade-in"
-            style={{
-              marginBottom: 24,
-            }}
-          >
+          <div className="fade-in" style={{ marginBottom: 24 }}>
             <span style={{ color: 'var(--syn-comment)', fontSize: 12 }}>{'<h1>'}</span>
             <h1
               style={{
@@ -69,7 +65,7 @@ export default async function DynamicPage(props: { params: Params }) {
               marginBottom: 16,
             }}
           >
-            <BlocksRenderer content={page.content} />
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{page.content}</ReactMarkdown>
           </div>
         </div>
 

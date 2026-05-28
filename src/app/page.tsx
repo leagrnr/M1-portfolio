@@ -1,8 +1,7 @@
 import { getPageBySlug } from '@/services/pageService';
-import { BlocksRenderer } from '@strapi/blocks-react-renderer';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
-
-export const revalidate = 3600; // ISR — revalidation toutes les heures
 
 export default async function Home() {
   const page = await getPageBySlug('home');
@@ -74,7 +73,7 @@ export default async function Home() {
         <div>{'}'}</div>
       </div>
 
-      {/* Content from Strapi */}
+      {/* Content from markdown */}
       {page && (
         <div className="fade-in fade-in-4" style={{ marginBottom: 48 }}>
           <div style={{ color: 'var(--syn-comment)', marginBottom: 12 }}>
@@ -89,7 +88,7 @@ export default async function Home() {
               padding: '20px 24px',
             }}
           >
-            <BlocksRenderer content={page.content} />
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{page.content}</ReactMarkdown>
           </div>
         </div>
       )}

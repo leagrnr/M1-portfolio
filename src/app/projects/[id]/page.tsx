@@ -1,14 +1,19 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { BlocksRenderer } from '@strapi/blocks-react-renderer';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { getProjectById, getProjects } from '@/services/projectService';
-import { strapiUrl } from '@/lib/strapiUrl';
 import type { Metadata } from 'next';
 
-export const revalidate = 3600;
+export const revalidate = false;
 
 type Params = Promise<{ id: string }>;
+
+export async function generateStaticParams() {
+  const projects = await getProjects();
+  return projects.map((p) => ({ id: p.documentId }));
+}
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { id } = await params;
@@ -146,7 +151,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
                 }}
               >
                 <Image
-                  src={strapiUrl(img.url)}
+                  src={img.url}
                   alt={img.alternativeText ?? `${project.title} — screenshot ${i + 1}`}
                   width={img.width ?? 1200}
                   height={img.height ?? 675}
@@ -173,7 +178,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
             marginBottom: 40,
           }}
         >
-          <BlocksRenderer content={project.content} />
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{project.content}</ReactMarkdown>
         </div>
       </div>
 

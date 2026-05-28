@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Project } from '@/types/strapi';
-import { strapiUrl } from '@/lib/strapiUrl';
 
 function TechPill({ tech }: { tech: string }) {
   return (
@@ -36,7 +35,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
       {cover && (
         <div style={{ aspectRatio: '16/9', overflow: 'hidden', borderBottom: '1px solid var(--border-muted)' }}>
           <Image
-            src={strapiUrl(cover.url)}
+            src={cover.url}
             alt={cover.alternativeText ?? project.title}
             width={cover.width ?? 800}
             height={cover.height ?? 450}

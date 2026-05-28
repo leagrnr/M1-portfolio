@@ -1,14 +1,11 @@
 import { z } from 'zod';
-import { type BlocksContent } from '@strapi/blocks-react-renderer';
-
-const BlocksContentSchema = z.custom<BlocksContent>((val) => Array.isArray(val));
 
 export const PageSchema = z.object({
   documentId: z.string(),
   title: z.string(),
   slug: z.string(),
   excerpt: z.string(),
-  content: BlocksContentSchema,
+  content: z.string(),
   seo_description: z.string(),
   owner_tag: z.string(),
   locale: z.string(),

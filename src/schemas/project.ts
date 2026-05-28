@@ -1,16 +1,12 @@
 import { z } from 'zod';
-import { type BlocksContent } from '@strapi/blocks-react-renderer';
 import { StrapiImageSchema } from './image';
-
-const BlocksContentSchema = z.custom<BlocksContent>((val) => Array.isArray(val));
 
 export const ProjectSchema = z.object({
   documentId: z.string(),
   title: z.string(),
-  description: z.string(),
   excerpt: z.string(),
-  content: BlocksContentSchema,
-  images: z.array(StrapiImageSchema).optional(),
+  content: z.string(),
+  images: z.array(StrapiImageSchema).optional().default([]),
   technologies: z.string().optional(),
   url: z.string().nullable().optional(),
   github_url: z.string().nullable().optional(),

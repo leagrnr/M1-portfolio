@@ -1,20 +1,15 @@
-import { getPageBySlug } from '@/services/pageService';
-import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 import Link from 'next/link';
 
 export const metadata = { title: 'À propos — Portfolio' };
-export const revalidate = 3600; // ISR — revalidation toutes les heures
 
-export default async function AboutPage() {
-  const page = await getPageBySlug('about');
-
+export default function AboutPage() {
   return (
     <div style={{ maxWidth: 800, margin: '0 auto', padding: '48px 24px' }}>
       {/* File header */}
       <div className="fade-in fade-in-1" style={{ color: 'var(--syn-comment)', marginBottom: 32, lineHeight: 1.8 }}>
         <div>{'/**'}</div>
         <div>{' * @file about.tsx'}</div>
-        <div>{' * @description ' + (page?.excerpt ?? 'À propos de moi')}</div>
+        <div>{' * @description À propos de moi'}</div>
         <div>{' */'}</div>
       </div>
 
@@ -44,82 +39,9 @@ export default async function AboutPage() {
                 lineHeight: 1.3,
               }}
             >
-              {page?.title ?? 'À propos'}
+              À propos
             </h1>
             <div style={{ color: 'var(--syn-comment)', fontSize: 12 }}>{'</h1>'}</div>
-          </div>
-
-          {/* Content from Strapi */}
-          <div
-            className="fade-in fade-in-4"
-            style={{
-              background: 'var(--bg-secondary)',
-              border: '1px solid var(--border)',
-              borderRadius: 6,
-              padding: '24px',
-              marginBottom: 32,
-              fontSize: 13,
-              lineHeight: 2,
-            }}
-          >
-            {page ? (
-              <div className="code-prose">
-                <BlocksRenderer content={page.content} />
-              </div>
-            ) : (
-              <>
-                <div style={{ color: 'var(--syn-comment)', marginBottom: 20 }}>
-                  {'// Développeuse web en formation, passionnée par les interfaces soignées'}
-                </div>
-
-                <div style={{ marginBottom: 20 }}>
-                  <span style={{ color: 'var(--syn-keyword)' }}>const</span>
-                  {' '}
-                  <span style={{ color: 'var(--syn-variable)' }}>bio</span>
-                  {' = '}
-                  <span style={{ color: 'var(--syn-string)' }}>
-                    {'"Je suis Lea, développeuse web full-stack en alternance. Je construis des interfaces qui allient lisibilité et expérience utilisateur — ce portfolio en est un exemple."'}
-                  </span>
-                </div>
-
-                <div style={{ marginBottom: 20 }}>
-                  <span style={{ color: 'var(--syn-keyword)' }}>const</span>
-                  {' '}
-                  <span style={{ color: 'var(--syn-variable)' }}>stack</span>
-                  {' = ['}
-                  {['Next.js', 'TypeScript', 'React', 'Strapi', 'PostgreSQL', 'Docker'].map((t, i, arr) => (
-                    <span key={t}>
-                      <span style={{ color: 'var(--syn-string)' }}>'{t}'</span>
-                      {i < arr.length - 1 && ', '}
-                    </span>
-                  ))}
-                  {']'}
-                </div>
-
-                <div style={{ marginBottom: 20 }}>
-                  <span style={{ color: 'var(--syn-keyword)' }}>const</span>
-                  {' '}
-                  <span style={{ color: 'var(--syn-variable)' }}>formation</span>
-                  {' = '}
-                  <span style={{ color: 'var(--syn-string)' }}>"MDS — Développeur web & web mobile"</span>
-                </div>
-
-                <div>
-                  <span style={{ color: 'var(--syn-keyword)' }}>const</span>
-                  {' '}
-                  <span style={{ color: 'var(--syn-variable)' }}>dispo</span>
-                  {' = { '}
-                  <span style={{ color: 'var(--syn-property)' }}>status</span>
-                  {': '}
-                  <span style={{ color: 'var(--syn-string)' }}>"alternance"</span>
-                  {', '}
-                  <span style={{ color: 'var(--syn-property)' }}>open</span>
-                  {': '}
-                  <span style={{ color: 'var(--syn-keyword)' }}>true</span>
-                  {' }'}
-                </div>
-              </>
-            )}
           </div>
 
           {/* Languages */}

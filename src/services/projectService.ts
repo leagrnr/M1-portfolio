@@ -1,52 +1,37 @@
 import 'server-only';
-import { z } from 'zod';
-import { strapiClient } from '@/lib/graphql-client';
-import { ProjectSchema, ProjectsResponseSchema, type Project } from '@/schemas/project';
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+import { ProjectSchema, type Project } from '@/schemas/project';
 
-type NextCache = { next?: { tags?: string[] } };
+const PROJECTS_DIR = path.join(process.cwd(), 'src/content/projects');
 
-const PROJECT_FIELDS = `
-  documentId
-  title
-  description
-  excerpt
-  content
-  images {
-    documentId
-    url
-    alternativeText
+function readProjectFile(filename: string): Project | null {
+  try {
+    const filePath = path.join(PROJECTS_DIR, filename);
+    const raw = fs.readFileSync(filePath, 'utf-8');
+    const { data, content } = matter(raw);
+    return ProjectSchema.parse({ ...data, content });
+  } catch {
+    return null;
   }
-  technologies
-  url
-  github_url
-  year
-  owner_tag
-  locale
-`;
-
-const GET_PROJECTS = `
-  query GetProjects($ownerId: String!, $locale: I18NLocaleCode) {
-    projects(filters: { owner_tag: { eq: $ownerId } }, locale: $locale) {
-      ${PROJECT_FIELDS}
-    }
-  }`;
-
-const GET_PROJECT = `
-  query GetProject($documentId: ID!, $locale: I18NLocaleCode) {
-    project(documentId: $documentId, locale: $locale) {
-      ${PROJECT_FIELDS}
-    }
-  }`;
-
-export async function getProjects(locale: string = 'en'): Promise<Project[]> {
-  const vars = { ownerId: process.env.NEXT_PUBLIC_OWNER_TAG!, locale };
-  const raw = await strapiClient.request(GET_PROJECTS, vars, { next: { tags: ['projects'] } } as NextCache);
-  const { projects } = ProjectsResponseSchema.parse(raw);
-  return projects;
 }
 
-export async function getProjectById(documentId: string, locale: string = 'en'): Promise<Project | null> {
-  const raw = await strapiClient.request(GET_PROJECT, { documentId, locale }, { next: { tags: ['projects'] } } as NextCache);
-  const { project } = z.object({ project: ProjectSchema.nullable() }).parse(raw);
-  return project;
+export async function getProjects(locale: string = 'fr'): Promise<Project[]> {
+  if (!fs.existsSync(PROJECTS_DIR)) return [];
+  const files = fs.readdirSync(PROJECTS_DIR).filter((f) => f.endsWith('.md'));
+  return files
+    .map((f) => readProjectFile(f))
+    .filter((p): p is Project => p !== null && p.locale === locale)
+    .sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
+}
+
+export async function getProjectById(documentId: string, locale: string = 'fr'): Promise<Project | null> {
+  if (!fs.existsSync(PROJECTS_DIR)) return null;
+  const files = fs.readdirSync(PROJECTS_DIR).filter((f) => f.endsWith('.md'));
+  for (const file of files) {
+    const project = readProjectFile(file);
+    if (project && project.documentId === documentId && project.locale === locale) return project;
+  }
+  return null;
 }

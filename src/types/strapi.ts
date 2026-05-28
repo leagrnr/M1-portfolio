@@ -1,5 +1,3 @@
-import { type BlocksContent } from '@strapi/blocks-react-renderer';
-
 export interface StrapiImage {
   documentId: string;
   url: string;
@@ -14,19 +12,8 @@ export interface Page {
   title: string;
   slug: string;
   excerpt: string;
-  content: BlocksContent;
+  content: string;
   seo_description: string;
-  owner_tag: string;
-  locale: string;
-}
-
-export interface Article {
-  documentId: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content?: BlocksContent;
-  cover?: StrapiImage | null;
   owner_tag: string;
   locale: string;
 }
@@ -34,9 +21,8 @@ export interface Article {
 export interface Project {
   documentId: string;
   title: string;
-  description: string;
   excerpt: string;
-  content: BlocksContent;
+  content: string;
   images?: StrapiImage[];
   technologies?: string;
   url?: string | null;
@@ -57,13 +43,8 @@ export interface Contact {
 
 export type CreateContactInput = Omit<Contact, 'documentId' | 'owner_tag'>;
 
-// GraphQL Response Wrappers
 export type PageResponse = {
   pages: Page[];
-};
-
-export type ArticleResponse = {
-  articles: Article[];
 };
 
 export type ProjectsResponse = {

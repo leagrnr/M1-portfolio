@@ -23,7 +23,6 @@ export async function submitContact(
     await createContact({
       ...result.data,
       subject: 'Contact depuis le portfolio',
-      owner_tag: process.env.NEXT_PUBLIC_OWNER_TAG!,
     });
     return { success: true, message: 'Message envoyé !' };
   } catch {
